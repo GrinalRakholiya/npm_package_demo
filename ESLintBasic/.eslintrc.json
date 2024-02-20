@@ -1,0 +1,24 @@
+{   
+    "rules":  {
+
+      "semi": "warn",
+
+      "eqeqeq": ["warn", "always"],
+
+      "indent": ["warn", 4],
+
+      "quotes": ["warn", "double"],
+
+      "no-unused-vars": "off",
+
+      "no-use-before-define": "error",
+
+      "no-console": "off",
+
+      "strict": ["off", "global"],
+
+      "no-multi-spaces": "error"
+
+    }
+}
+ 
