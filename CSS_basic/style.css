@@ -1,0 +1,132 @@
+
+* {
+    margin: 0;
+    color: #0e0e0e;
+    padding: 0;  
+}
+
+header {
+    background-color: #bfef4e;
+    padding: 20px;
+    text-align: center;
+}
+
+nav {
+    color: #666;
+    margin-top: 20px;
+    background-color: #d2e99d;
+    text-align: center;    
+    padding: 15px;
+}
+nav a{
+    margin-right: 10px;
+}
+
+ nav a:hover {
+    color: #ed8181;
+}
+
+.box {
+    width: 200px;
+    height: 130px;
+    padding: 20px;
+    border: 2px dotted #000;
+    margin: 100px;
+    margin-top: 20px;
+    /* margin-left: 340px; */
+    margin-left: 850px;
+    margin-bottom: 6px;
+    padding: 12px;
+    background-color: rgb(197, 221, 169);
+} 
+
+.box p {
+    margin-top: 10px;
+    margin-bottom: 8px;
+} 
+/* Class Selector */
+.highlight {
+    font-weight: bold;
+}
+
+/* ID Selector */
+#special {
+    color: red;
+}
+
+/* Descendant Selector */
+.box .container p {
+    background-color: rgb(197, 221, 169);
+}
+.display-property{
+        text-align: center;
+}
+button{
+    background-color: lightgreen;  
+    padding: 10px;
+    border: none;
+    width: 120px;
+}
+
+.inline-block {
+    display: inline-block;
+    background-color:rgb(240, 237, 105);
+    margin: 8px;
+    padding: 10px;
+}
+
+.flex-item {
+    background-color: rgb(228, 219, 54);
+    padding: 10px;
+    margin: 5px;
+}
+
+ img {
+     display: inline-block;
+ }
+
+ .static-position {
+     position: static;
+ }
+
+ .relative-position {
+     position: relative;
+     top: 20px;
+     left: 50px;
+ }
+
+ .absolute-position {
+     position: absolute;
+
+ }
+
+ .fixed-position {
+     position: fixed;
+     top: 20px;
+     right: 20px;
+ }
+
+ .floating  {
+     width: 900px;
+ }
+
+ #img1 {
+       float: right;
+   }
+
+/* Grid Container */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+.grid-item {
+    background-color: lightblue;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
