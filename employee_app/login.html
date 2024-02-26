@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<!-- Created By CodingNepal -->
-<html lang="en" dir="ltr">
+<html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <!-- <title>Neumorphism Login Form UI | CodingNepal</title> -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <!-- Link your CSS file here if you have any -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <style>
     @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
@@ -24,14 +25,14 @@
     body {
       display: grid;
       place-items: center;
-      background: #dde1e7;
+      background: #DDE1E7;
       text-align: center;
     }
 
     .content {
       width: 330px;
       padding: 40px 30px;
-      background: #dde1e7;
+      background: #DDE1E7;
       border-radius: 10px;
       box-shadow: -3px -3px 7px #ffffff73, 2px 2px 5px rgba(94, 104, 121, 0.288);
     }
@@ -48,9 +49,6 @@
       width: 100%;
       display: flex;
       position: relative;
-    }
-
-    .field:nth-child(2) {
       margin-top: 20px;
     }
 
@@ -61,7 +59,7 @@
       outline: none;
       border: none;
       font-size: 18px;
-      background: #dde1e7;
+      background: #DDE1E7;
       color: #595959;
       border-radius: 25px;
       box-shadow: inset 2px 2px 5px #BABECC, inset -5px -5px 10px #ffffff73;
@@ -86,25 +84,9 @@
       pointer-events: none;
       color: #666666;
     }
-
-    .field input:valid~label {
-      opacity: 0;
-    }
-
-    .forgot-pass {
-      text-align: left;
-      margin: 10px 0 10px 5px;
-    }
-
-    .forgot-pass a {
-      font-size: 16px;
-      color: #3498db;
-      text-decoration: none;
-    }
-
-    .forgot-pass:hover a {
-      text-decoration: underline;
-    }
+.field input:valid~label {
+            opacity: 0;
+        }
 
     button {
       margin: 15px 0;
@@ -113,7 +95,7 @@
       font-size: 18px;
       line-height: 50px;
       font-weight: 600;
-      background: #dde1e7;
+      background: #DDE1E7;
       border-radius: 25px;
       border: none;
       outline: none;
@@ -123,7 +105,7 @@
     }
 
     button:focus {
-      color: #3498db;
+      color: #3498DB;
       box-shadow: inset 2px 2px 5px #BABECC, inset -5px -5px 10px #ffffff73;
     }
 
@@ -134,7 +116,7 @@
     }
 
     .sign-up a {
-      color: #3498db;
+      color: #3498DB;
       text-decoration: none;
     }
 
@@ -149,37 +131,61 @@
     <div class="text">
       Login Form
     </div>
-    <form id="loginForm" action="#">
+    <form id="loginForm">
       <div class="field">
-        <input type="text" id="email" required autocomplete="new-password">
+        <input type="text" id="username" name="username" required autocomplete="username">
         <span class="fas fa-user"></span>
-        <label>Email</label>
+        <label>Username</label>
       </div>
       <div class="field">
-        <input type="password" id="password"  required autocomplete="new-password">
+        <input type="password" id="password" name="password" required autocomplete="current-password">
         <span class="fas fa-lock"></span>
         <label>Password</label>
       </div>
-      <div class="forgot-pass">
-        <a href="#">Forgot Password?</a>
-      </div>
-      <button type="button" id="loginButton">Sign in</button>
+      <button type="submit">Login</button>
       <div class="sign-up">
-        Not a member?
-        <a href="signUp.html">Sign up</a>
+        Don't have an account? <a href="signup.html">Sign up</a>
       </div>
     </form>
   </div>
 
   <script>
-    document.getElementById("loginButton").addEventListener("click", function () {
-      // Get the values from the input fields
-      var email = document.getElementById("email").value;
-      var password = document.getElementById("password").value;
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("loginForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent the default form submission behavior
 
-      // Print the values to the console
-      console.log("Email: ", email);
-      console.log("Password: ", password);
+        // Retrieve form input values
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+
+        // Create user data object
+        var userData = {
+          username: username,
+          password: password
+        };
+
+        // Make POST request to server
+        fetch("http://localhost:3000/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(userData)
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            alert(data.message); // You can handle the response message accordingly
+             if (data.success) {
+              // If login is successful, redirect to the employee table page
+              window.location.href = "empList.html";
+            } 
+          })
+          .catch(error => {
+            console.error("Error occurred during login:", error);
+            alert("An error occurred. Please try again later.");
+          });
+      });
     });
   </script>
 </body>
