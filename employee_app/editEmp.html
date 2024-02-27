@@ -1,40 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Employee</title>
+    <link rel="stylesheet" type="text/css" href="./style.css" />
 </head>
 
 <body>
-    <h1>Edit Employee</h1>
-    <form id="editEmployeeForm">
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email">
-        </div>
-        <div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username">
-        </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password">
-        </div>
-        <button type="submit">Submit</button>
-    </form>
+    <div class="content-edit">
+        <div class="text">Edit Employee</div>
+        <form id="editEmployeeForm" onsubmit="submitEditForm(event)">
+            <div class="field">
+                <input type="email" id="email" name="email" required autocomplete="email">
+                <label>Email</label>
+            </div>
+            <div class="field">
+                <input type="text" id="username" name="username" required autocomplete="username">
+                <label>Username</label>
+            </div>
+            <div class="field">
+                <input type="password" id="password" name="password" required autocomplete="new-password">
+                <label>Password</label>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
     <script>
-        // Handle form submission
-        document.getElementById('editEmployeeForm').addEventListener('submit', function (event) {
+        function submitEditForm(event) {
             event.preventDefault(); // Prevent default form submission
 
-            // Get form data
             const email = document.getElementById('email').value;
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            // Prepare the updated employee data
             const updatedEmployeeData = {
                 email: email,
                 username: username,
@@ -51,14 +48,18 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data); // Log the response from the server
-                    // Handle the response accordingly (e.g., show a success message)
+                    console.log(data);
+                    if (data.success) {
+                        alert(data.message); 
+                        window.location.href = 'empList.html'; 
+                    } else {
+                        alert(data.message); 
+                    }
                 })
                 .catch(error => {
                     console.error('Error updating employee details:', error);
-                    // Handle errors (e.g., show an error message)
                 });
-        });
+        }
     </script>
 </body>
 

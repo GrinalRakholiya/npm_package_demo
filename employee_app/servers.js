@@ -1,9 +1,7 @@
-
 const http = require('http');
 const PORT = 3000;
 
-// Array to store signup form data
-const users = [];
+const users = []; // Array to store signup form data
 
 // Create a server
 const server = http.createServer((req, res) => {
@@ -24,11 +22,15 @@ const server = http.createServer((req, res) => {
         });
         req.on('end', () => {
             const userData = JSON.parse(body);
+            
+            const existingUser = users.find(user => user.email === userData.email);
+            if (existingUser) {
+                res.writeHead(409, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ success: false, message: 'Email already exists. Please use a different email.' }));
+                return;
+            }
+            users.push(userData);  // Push user data into the users array
             console.log('Signup form data received:', userData);
-
-            // Push user data into the users array
-            users.push(userData);
-
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ success: true, message: 'User signed up successfully!' }));
         });
@@ -40,21 +42,19 @@ const server = http.createServer((req, res) => {
         });
         req.on('end', () => {
             const loginData = JSON.parse(body);
-            //  console.log('Login form data received:', loginData);
 
             // Check if user exists in the users array
-            const foundUser = users.find(user => user.username === loginData.username && user.password === loginData.password);
+            const foundUser = users.find(user => user.email === loginData.email && user.password === loginData.password);
             if (foundUser) {
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ success: true, message: 'Login successful!' }));
             } else {
                 res.writeHead(401, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ success: false, message: 'Invalid username or password' }));
+                res.end(JSON.stringify({ success: false, message: 'Invalid email-id or password' }));
             }
         });
     }
-    else if (req.method === 'GET' && req.url === '/employees') {
-        // Return the list of users as employees
+    else if (req.method === 'GET' && req.url === '/employees') {    
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(users));
     }
@@ -65,34 +65,59 @@ const server = http.createServer((req, res) => {
         });
         req.on('end', () => {
             const employeeData = JSON.parse(body);
+
+            // Check if the email already exists in the users array
+            const existingEmployee = users.find(user => user.email === employeeData.email);
+            if (existingEmployee) {
+                res.writeHead(409, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ success: false, message: 'Email already exists. Please use a different email.' }));
+                return;
+            }
+
             console.log('Employee data received:', employeeData);
-
-            // Push employee data into the users array
-            users.push(employeeData);
-
+            users.push(employeeData); // Push employee data into the users array
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ success: true, message: 'Employee added successfully!' }));
         });
     }
-    // Handle PUT request to update employee details based on email ID
-    else if (req.method === 'PUT' && req.url === '/updateEmployee') {
+
+    else if (req.method === 'PUT' && req.url === '/updateEmployee') {  // Handle PUT request to update employee details based on email ID
         let body = '';
         req.on('data', (chunk) => {
             body += chunk.toString(); // Convert Buffer to string
         });
         req.on('end', () => {
             const updatedEmployeeData = JSON.parse(body);
-           // console.log('Updated employee data received:', updatedEmployeeData);
 
             // Find the employee with the provided email in the users array
             const employeeIndex = users.findIndex(user => user.email === updatedEmployeeData.email);
-           // console.log('Updated employee data received:', updatedEmployeeData);
 
             if (employeeIndex !== -1) {
-                // Update the employee details
                 users[employeeIndex] = updatedEmployeeData;
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ success: true, message: 'Employee details updated successfully!' }));
+            } else {
+                res.writeHead(404, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ success: false, message: 'Employee not found with the provided email' }));
+            }
+        });
+    }
+    else if (req.method === 'DELETE' && req.url === '/deleteEmployee') {
+        let body = '';
+        req.on('data', (chunk) => {
+            body += chunk.toString(); // Convert Buffer to string
+        });
+        req.on('end', () => {
+            const deleteData = JSON.parse(body);
+
+            // Find the index of the employee with the provided email in the users array
+            const employeeIndex = users.findIndex(user => user.email === deleteData.email);
+
+            if (employeeIndex !== -1) {
+                // Remove the employee from the users array
+                users.splice(employeeIndex, 1);
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ success: true, message: 'Employee deleted successfully!' }));
             } else {
                 res.writeHead(404, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ success: false, message: 'Employee not found with the provided email' }));
