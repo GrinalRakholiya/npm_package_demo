@@ -1,8 +1,12 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Employee</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
     <style>
         @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
 
@@ -25,13 +29,13 @@
             text-align: center;
         }
 
-        .content {
-            width: 330px;
-            padding: 40px 30px;
-            background: #DDE1E7;
-            border-radius: 10px;
-            box-shadow: -3px -3px 7px #ffffff73, 2px 2px 5px rgba(94, 104, 121, 0.288);
-        }
+       .content {
+        width: 330px;
+        padding: 15px 30px; /* Adjusted padding */
+        background: #DDE1E7;
+        border-radius: 10px;
+        box-shadow: -3px -3px 7px #ffffff73, 2px 2px 5px rgba(94, 104, 121, 0.288);
+    }
 
         .content .text {
             font-size: 33px;
@@ -132,75 +136,60 @@
 <body>
     <div class="content">
         <div class="text">
-            Sign Up Form
+            Add Employee
         </div>
-        <form id="signupForm" action="http://localhost:3000/submit" method="POST">
+        <form id="addEmployeeForm">
             <div class="field">
-                <input type="text" id="username" name="username" required autocomplete="username">
+                <input type="text" id="username" name="username" required>
                 <span class="fas fa-user"></span>
                 <label>Username</label>
             </div>
             <div class="field">
-                <input type="email" id="email" name="email" required autocomplete="email">
+                <input type="email" id="email" name="email" required>
                 <span class="fas fa-envelope"></span>
                 <label>Email</label>
             </div>
             <div class="field">
-                <input type="password" id="password" name="password" required autocomplete="new-password">
+                <input type="password" id="password" name="password" required>
                 <span class="fas fa-lock"></span>
                 <label>Password</label>
             </div>
-            <div class="field">
-                <input type="password" id="confirmPassword" name="confirmPassword" required autocomplete="new-password">
-                <span class="fas fa-lock"></span>
-                <label>Confirm Password</label>
-                <div class="error-message" id="passwordError"></div>
-            </div>
-            <button type="submit">Sign Up</button>
-            <div class="sign-up">
-                Already have an account?
-                <a href="login.html">Log in</a>
-            </div>
+            <button type="submit">Add Employee</button>
         </form>
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            document.getElementById("signupForm").addEventListener("submit", function (event) {
-                event.preventDefault(); // Prevent the default form submission behavior
+            document.getElementById("addEmployeeForm").addEventListener("submit", function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
                 // Retrieve form input values
                 var username = document.getElementById("username").value;
                 var email = document.getElementById("email").value;
                 var password = document.getElementById("password").value;
-                var confirmPassword = document.getElementById("confirmPassword").value;
-                console.log(username, email);
-                // Check if password matches confirm password
-                if (password !== confirmPassword) {
-                    alert('Password and Confirm password must be the same');
-                    return;
-                }
-                // Create user data object
-                var userData = {
+
+                // Create employee data object
+                var employeeData = {
                     username: username,
                     email: email,
-                    password: password,
-                    confirmPassword: confirmPassword
+                    password: password
                 };
-                console.log(userData);
-                // Make POST request to server
-                fetch("http://localhost:3000/signup", {
+
+                // Make POST request to server to add employee
+                fetch("http://localhost:3000/addEmployee", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify(userData)
+                    body: JSON.stringify(employeeData)
                 })
                     .then(response => response.json())
                     .then(data => {
-                        console.log("Form data submitted successfully:", data);
-                        alert(data.message);
+                        console.log(data);
+                        alert(data.message); // You can handle the response message accordingly
+                        // Redirect to employee list or other pages if employee is added successfully
                     })
                     .catch(error => {
-                        console.error("Error occurred during form data submission:", error);
+                        console.error("Error occurred while adding employee:", error);
                         alert("An error occurred. Please try again later.");
                     });
             });
