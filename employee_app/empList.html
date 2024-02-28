@@ -1,175 +1,136 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee List</title>
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            text-align: center;
             background-color: #DDE1E7;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
-            /* Align items at the top */
             align-items: center;
-            min-height: 100vh;
-            /* Ensure the body covers the viewport height */
         }
-
         h1 {
             font-size: 33px;
-            font-weight: 600;
-            color: #595959;
-            margin: 20px 0;
-            /* Adjust margin */
         }
-
         #employeeTable {
-            width: 40%;
+            width: 60%;
             margin-bottom: 20px;
-            /* Add space between table and button */
             background-color: #fff;
-            border-collapse: collapse;
-            box-shadow: -3px -3px 7px #ffffff73, 2px 2px 5px rgba(94, 104, 121, 0.288);
             border-radius: 10px;
-            overflow: hidden;
         }
-
         #employeeTable th,
         #employeeTable td {
-            padding: 12px 15px;
+            padding: 12px;
             text-align: left;
         }
-
         #employeeTable th {
             background-color: #333;
             color: #fff;
-        }
-
-        #employeeTable tbody tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
+        }    
         #employeeTable tbody tr:hover {
             background-color: #ddd;
         }
-
-        #addEmployeeBtn,edit {
-            padding: 10px 20px;
+        #addEmployeeBtn {
+            padding: 10px;
             background-color: #333;
             color: #fff;
-            border: none;
-            cursor: pointer;
             border-radius: 5px;
         }
-
         #addEmployeeBtn:hover {
             background-color: #616263;
-        }
-         #editEmployeeBtn,edit {
-            padding: 10px 20px;
+        }           
+        .logout-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 8px 16px;
             background-color: #333;
             color: #fff;
             border: none;
-            cursor: pointer;
             border-radius: 5px;
         }
-
-        #editEmployeeBtn:hover {
+        .logout-btn:hover {
             background-color: #616263;
+        }   
+       .action-buttons {            
+            width: 180px; /* Set the width of the action column */
         }
-         #deleteEmployeeBtn,edit {
-            padding: 10px 20px;
-            background-color: #333;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        #deleteEmployeeBtn:hover {
-            background-color: #616263;
+         .action-buttons button {
+            margin-right: 20px; /* Add margin between the buttons */
         }
     </style>
 </head>
 
 <body>
     <h1>Employee List</h1>
+    <button class="logout-btn" onclick="logout()">Logout</button>
     <table id="employeeTable">
         <thead>
             <tr>
                 <th>Username</th>
                 <th>Email</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             <!-- Employee data will be dynamically populated here -->
         </tbody>
     </table>
-    <button id="addEmployeeBtn">Add Employee</button>
-    <button id="editEmployeeBtn">Edit Employee</button>
-    <button id="deleteEmployeeBtn">Delete Employee</button>
-
-
-
-    <!-- Include any necessary JavaScript here -->
+    <button id="addEmployeeBtn" onclick="addEmployee()">Add Employee</button>
+   
     <script>
-        // Function to add event listener for Add Employee button
-        document.getElementById('addEmployeeBtn').addEventListener('click', function () {
-            addEmployee();
-        });
-    document.getElementById('editEmployeeBtn').addEventListener('click', function () {
-        editEmployee();
-    });
-    document.getElementById('deleteEmployeeBtn').addEventListener('click', function () {
-            deleteEmployee();
-        });
-
-        // Fetch employee data from the server
         function fetchEmployees() {
             fetch('http://localhost:3000/employees')
                 .then(response => response.json())
                 .then(data => {
-                    // Populate the table with employee data
                     const tbody = document.querySelector('#employeeTable tbody');
-                    tbody.innerHTML = ''; // Clear existing rows
-
+                    
                     data.forEach(employee => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td>${employee.username}</td>
-                            <td>${employee.email}</td>                            
-                        `;
+                            <td>${employee.email}</td>                        
+                            <td class="action-buttons"><button onclick="editEmployee('${employee.email}')">Edit</button>
+                            <button onclick="deleteEmployee('${employee.email}', event)">Delete</button></td>
+                      `;
                         tbody.appendChild(row);
                     });
-                })
-                .catch(error => {
-                    console.error('Error fetching employee data:', error);
-                });
+                })             
         }
-
         fetchEmployees(); // Initial fetch
 
-        function addEmployee() {
-            // Logic to add new employee
-            // You can redirect to a page for adding new employee or open a modal
-            console.log('Adding new employee');
+        function addEmployee() {        
             window.location.href = 'addEmp.html';
         }
-    function editEmployee(email) {
-        // Logic to edit employee
-        window.location.href = 'editEmp.html';
-    }
 
-        function deleteEmployee(email) {           
-             window.location.href = 'delete.html';
+        function editEmployee(email) {          
+            window.location.href = 'editEmp.html?email=' + email;
         }
+
+        function deleteEmployee(email) {
+            fetch('http://localhost:3000/deleteEmployee', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: email })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log(data);
+                        alert(data.message); 
+                        window.location.href = 'empList.html';
+                    } else {
+                        console.error('Failed to delete employee:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting employee:', error);
+                });
+        }
+         function logout() {
+                window.location.href = 'login.html';
+            }
     </script>
 </body>
-
 </html>
