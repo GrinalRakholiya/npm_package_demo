@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Form</title>
+    <link rel="stylesheet" type="text/css" href="../commonStyle/style.css">
+</head>
+
+<body>
+  <div class="content-login">
+    <div class="text">Login Form</div>
+    <form id="loginForm">
+      <div class="field">
+        <input type="email" id="email" name="email" required autocomplete="email">
+        <label>Email</label>
+      </div>
+      <div class="field">
+        <input type="password" id="password" name="password" required autocomplete="current-password">
+        <label>Password</label>
+      </div>
+      <button type="submit">Login</button>
+      <div class="sign-up">
+        Don't have an account? <a href="../signUpEmployee/signup.html">Sign up</a>
+      </div>
+    </form>
+  </div>
+  <script src="./login.js" type="module"></script>
+</body>
+
+</html>
