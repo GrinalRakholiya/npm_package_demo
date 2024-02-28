@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Form</title>
+    <link rel="stylesheet" type="text/css" href="../commonStyle/style.css">
+     
+</head>
+<body>
+    <div class="content">
+        <div class="text">
+            Sign Up Form
+        </div>
+        <form id="signupForm">
+            <div class="field">
+                <input type="text" id="username" name="username" required autocomplete="username">
+                <label>Username</label>
+            </div>
+            <div class="field">
+                <input type="email" id="email" name="email" required autocomplete="email">
+                <label>Email</label>
+            </div>
+            <div class="field">
+                <input type="password" id="password" name="password" required autocomplete="new-password">
+                <label>Password</label>
+            </div>
+            <div class="field">
+                <input type="password" id="confirmPassword" name="confirmPassword" required autocomplete="new-password">
+                <label>Confirm Password</label>
+                <div class="error-message" id="passwordError"></div>
+            </div>
+            <button type="submit">Sign Up</button>
+            <div class="sign-up">
+                Already have an account?
+                <a href="../loginEmployee/login.html">Log in</a>
+            </div>
+        </form>
+    </div>
+    <script src="./signup.js" type="module"></script>
+</body>
+
+</html>
